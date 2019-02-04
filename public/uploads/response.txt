@@ -1,0 +1,1 @@
+{"responses":[{"labelAnnotations":[{"mid":"/m/01yrx","description":"Cat","score":0.98214674,"topicality":0.98214674}]}]}
