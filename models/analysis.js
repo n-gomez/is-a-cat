@@ -13,7 +13,7 @@ module.exports = function analysis() {
             return catScore;
         }
         });
-        console.log(`Catscore is ===============> ${catScore}`);
+        console.log(`Catscore is ===> ${catScore}`);
         if(catScore) {
             switch (true) {
               case (isCatPercent >= .90):
@@ -41,7 +41,6 @@ module.exports = function analysis() {
         return catMsg;
     };
     this.msg = catMsg(this.labels);
-    //this.msg = this.labels;
 };
 
 
