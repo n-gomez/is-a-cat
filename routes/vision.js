@@ -5,16 +5,15 @@ const https = require('https');
 const fs = require('fs');
 const axios = require('axios');
 const router = express.Router();
-let lbls = [];
 
-// Set storage
+//Set storage for image
 const storage = multer.diskStorage({
   destination: './public/uploads',
   filename: function(req, file, cb){
     cb(null, "image.jpeg");
   }
 });
-  
+
 // Initialize image upload
 const upload = multer({
   storage: storage,
@@ -63,14 +62,14 @@ router.post('/upload', (req, res) => {
                   "features":[
                     {
                       "type":"LABEL_DETECTION",
-                      "maxResults":20
+                      "maxResults":30
                     }
                   ]
                 }
               ]
             }
           }).then(function(response) {           
-             lbls = JSON.parse(JSON.stringify(response.data)).responses[0].labelAnnotations;
+             let lbls = JSON.parse(JSON.stringify(response.data)).responses[0].labelAnnotations;
              console.log(lbls);
 
              function isCat(labelObj) {
@@ -88,41 +87,36 @@ router.post('/upload', (req, res) => {
                if(catScore) {
                   switch (true) {
                     case (isCatPercent >= .90):
-                      catMsg = 'This image has a cat!!';
+                      catMsg = 'this image has a cat!!';
                       break;
                     case (isCatPercent >= .65):
-                      catMsg = 'This image likely has a cat.';
+                      catMsg = 'this image likely has a cat.';
                       break;
                     case (isCatPercent >= .35):
-                      catMsg = 'This image might have a cat.';
+                      catMsg = 'this image might have a cat.';
                       break;
                     case (isCatPercent >= .10):
-                      catMsg = 'It\'s unilekly for this image to have a cat.';
+                      catMsg = 'it\'s unilekly for this image to have a cat.';
                       break;
                     case (isCatPercent < .10):
-                      catMsg = 'Most likely this image does NOT have a cat.';
+                      catMsg = 'most likely this image does NOT have a cat.';
                       break;
                     default: 
-                      catMsg = 'No cat here!';
+                      catMsg = 'no cat here!';
                       break;
                   }
                 } else {
-                    catMsg = `This image does NOT have a cat =(`;
+                    catMsg = `this image does NOT have a cat =(`;
                 }
-                  fs.writeFile("./public/uploads/message.txt",`The score is ${Number.parseFloat(catScore* 100).toFixed(2)}%. ${catMsg}`,'utf8', function(err) { 
-                      if (err) {
-                          console.log('Message did not successfully write to file.');
-                          return console.log(err);
-                      }
                   res.render('index', {
-                    msg: `The score is ${Number.parseFloat(catScore* 100).toFixed(2)}%. ${catMsg}`,
+                    msg: `The score is ${Number.parseFloat(catScore* 100).toFixed(2)}%. Based on Google's score, ${catMsg}`,
                     file: `uploads/${req.file.filename}`
-                  })
-                  })
+                  });
+
              }
              isCat(lbls);
-          })
-       }}
+          });
+       }};
     });
 });
 

@@ -3,13 +3,13 @@ const path = require('path');
 const visionRoute = require('./routes/vision');
 
 
-// Init app
+// Initialize app
 const app = express();
 
-// EJS
+// EJS viewer
 app.set('view engine', 'ejs');
 
-// Public Folder
+// Public folder
 app.use(express.static('./public'));
 
 app.get('/', (req, res) => res.render('index'));
