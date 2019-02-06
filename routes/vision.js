@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 // Initialize image upload
 const upload = multer({
   storage: storage,
-  limits:{fileSize: 1024 * 1024 * 4},
+  limits:{fileSize: 1024 * 1024 * 6},
   fileFilter: function(req, file, cb){
     checkFileType(file, cb);
   }
@@ -41,7 +41,7 @@ router.post('/upload', (req, res) => {
   upload(req, res, (err) => {
     if(err){
        res.render('index', {
-         msg: err
+         msg: 'Please ensure the file size is less than 6 MB. Type must be jpeg, jpg, png or gif.'
        });
     } else {
        if(req.file == undefined) {
